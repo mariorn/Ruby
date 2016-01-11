@@ -19,24 +19,12 @@ def mostrar_ordenado (cadena)
 	#Filtramos la cadena para eliminar caracteres de puntuación
 	cadena = filtrado_caracteres (cadena)
 
-	#Partimos la cadena, cada palabra pasa a mayúscula y se ordena
-	cadena_aux = cadena.upcase.split(" ").sort
-
 	#Partimos la cadena
 	cadena = cadena.split(" ")
 
-	#Definimos el array de salida
-	array = []
+	cadena = cadena.sort {|word1, word2| word1.downcase <=> word2.downcase}
 
-	cadena_aux.each do |mayus|
-		cadena.each do |orig|
-			if orig.upcase == mayus
-				array << "#{orig} "
-			end
-		end
-	end
-
-	print array
+	print cadena
 	puts ""
 end
 
