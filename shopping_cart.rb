@@ -1,65 +1,112 @@
 
 class Item 
 
+  attr_reader :price
+
   def initialize(name, price)
       @name = name
       @price = price
   end
 
-  def get_price
-    return @price
-  end
+  def check_discount 
+
+    @price
+
+  end 
 
 end
 
 class Houseware < Item
 
+  def initialize(name, price)
+
+    super
+    @price = check_discount price;
+
+  end
+
   def get_discount
-    return 0.05 * @price
+    @price * 0.05
+  end
+
+  def check_discount price
+
+    if price >= 100
+
+      price - get_discount
+
+    else
+      price
+
+    end
   end
 
 end
 
 class Fruit < Item
 
+  def initialize(name, price)
+
+    super
+    @price = check_discount;
+
+  end
+
   def get_discount
-    return @price/10
+    @price * 0.1
+  end
+
+  def check_discount 
+
+    dia = Time.now.strftime("%A")
+
+    if (dia == "Saturday" || dia == "Sunday")
+      @price - get_discount
+
+    else
+      @price
+    end
+
   end
 
 end
 
 
 class ShoppingCart
+
   def initialize
     @items = []
   end
-  def add_item (item)
+
+  def add_item(item)
+
   	@items.push(item)
+
   end
+
+
+  def check_discount(total)
+
+    if @items.length >= 5 
+      total - total/10
+
+    else
+      total
+    end
+
+  end
+
 
   def checkout
   	total = 0
-    dia = Time.now.strftime("%A")
 
+    #Obtenemos el precio total de todos los productos
   	@items.each do |item|
-      if item.class.to_s == "Houseware" && item.get_price >= 100
-        puts "  Descuento por compra por valor superior a 100€: #{item.get_discount} €" 
-        total += item.get_price - item.get_discount
-
-      elsif item.class.to_s == "Fruit" && (dia == "Saturday" || dia == "Sunday")
-        puts "  Descuento por compra en fin de semana: #{item.get_discount} €" 
-  		  total+= item.get_price - item.get_discount
-
-      else
-        total += item.get_price
-      end
-      
+      total += item.price
   	end
 
-  	if @items.length >= 5
-  		puts "  Descuento por compra de 5 o más artículos: #{total/10} €" 
-  		total = total - total/10
-  	end
+    #Obtenemos el total al descontar por >= 5 productos
+    total = check_discount(total)
 
   	puts "Your total today is #{total} €. Have a nice day!"
   end
